@@ -109,9 +109,9 @@ void Downloader::startDownload(const QUrl &url)
 {
    /* Reset UI */
    m_ui->progressBar->setValue(0);//将下载进度条重置为0
-   m_ui->stopButton->setText(tr("停止"));
-   m_ui->downloadLabel->setText(tr("下载更新"));
-   m_ui->timeLabel->setText(tr("剩余时间") + ": " + tr("..."));
+   m_ui->stopButton->setText(tr("stop"));
+   m_ui->downloadLabel->setText(tr("Download updates"));
+   m_ui->timeLabel->setText(tr("Remaining time") + ": " + tr("..."));
 
    /* Configure the network request 创建QNetworkRequest对象，配置URL和一些请求属性，例如重定向策略和用户代理*/
    QNetworkRequest request(url);
@@ -200,7 +200,7 @@ void Downloader::openDownload()
 
    else
    {
-      QMessageBox::critical(this, tr("Error"), tr("无法找到已下载的更新文件!"), QMessageBox::Close);
+      QMessageBox::critical(this, tr("Error"), tr("Unable to find downloaded update file!"), QMessageBox::Close);
    }
 }
 
@@ -219,23 +219,23 @@ void Downloader::installUpdate()
       return;
 
    /* Update labels */
-   m_ui->stopButton->setText(tr("关闭"));
-   m_ui->downloadLabel->setText(tr("已完成下载!"));
-   m_ui->timeLabel->setText(tr("即将打开已安装程序，请稍后") + "...");
+   m_ui->stopButton->setText(tr("close"));
+   m_ui->downloadLabel->setText(tr("Download completed!"));
+   m_ui->timeLabel->setText(tr("About to open the installed program, please wait") + "...");
 
    /* Ask the user to install the download */
    QMessageBox box;
    box.setIcon(QMessageBox::Question);
    box.setWindowIcon(QIcon(":/icons/nupdate.png"));
-   box.setWindowTitle("安装窗口");
+   box.setWindowTitle("Install Window");
    box.setDefaultButton(QMessageBox::Ok);
    box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-   box.setInformativeText(tr("点击 \"OK\" 开始安装"));
+   box.setInformativeText(tr("Click OK to start the installation"));
 
-   QString text = tr("为了完成新版本的安装，我们将关闭当前的应用程序，并在安装完成后重新启动应用程序");
+   QString text = tr("In order to complete the installation of the new version, we will close the current application and restart it after installation is complete");
 
    if (m_mandatoryUpdate)
-      text = tr("为了完成新版本的安装，我们将关闭当前的应用程序，并在安装完成后重新启动应用程序。这是一个强制更新，现在退出将关闭应用程序");
+      text = tr("In order to complete the installation of the new version, we will close the current application and restart it after the installation is completed. This is a mandatory update, exiting now will close the application");
 
    box.setText("<h3>" + text + "</h3>");
 
@@ -271,15 +271,15 @@ void Downloader::cancelDownload()
    if (!m_reply->isFinished())
    {
       QMessageBox box;
-      box.setWindowTitle(tr("取消更新"));
+      box.setWindowTitle(tr("Cancel update"));
       box.setIcon(QMessageBox::Question);
       box.setWindowIcon(QIcon(":/icons/nupdate.png"));
       box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-      QString text = tr("确定要取消下载吗？?");
+      QString text = tr("Are you sure you want to cancel the download?");
       if (m_mandatoryUpdate)
       {
-         text = tr("确定要取消下载吗？这是一个强制更新，现在退出将关闭应用程序。");
+         text = tr("Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application。");
       }
       box.setText(text);
       if (box.exec() == QMessageBox::Yes)
@@ -354,7 +354,7 @@ void Downloader::calculateSizes(qint64 received, qint64 total)
    else
       receivedSize = tr("%1 MB").arg(received / 1048576);
 
-   m_ui->downloadLabel->setText(tr("正在下载更新") + " (" + receivedSize + " " + tr("/") + " " + totalSize
+   m_ui->downloadLabel->setText(tr("Downloading updates") + " (" + receivedSize + " " + tr("/") + " " + totalSize
                                 + ")");
 }
 
@@ -402,8 +402,8 @@ void Downloader::updateProgress(qint64 received, qint64 total)
       m_ui->progressBar->setMinimum(0);
       m_ui->progressBar->setMaximum(0);
       m_ui->progressBar->setValue(-1);
-      m_ui->downloadLabel->setText(tr("更新") + "...");
-      m_ui->timeLabel->setText(QString("%1: %2").arg(tr("剩余时间")).arg(tr("...")));
+      m_ui->downloadLabel->setText(tr("update") + "...");
+      m_ui->timeLabel->setText(QString("%1: %2").arg(tr("Remaining time")).arg(tr("...")));
    }
 }
 
@@ -430,9 +430,9 @@ void Downloader::calculateTimeRemaining(qint64 received, qint64 total)
          int hours = int(timeRemaining + 0.5);
 
          if (hours > 1)
-            timeString = tr("大概 %1 小时").arg(hours);
+            timeString = tr("Approximately %1 hour").arg(hours);
          else
-            timeString = tr("大概 1 小时");
+            timeString = tr("Approximately one hour");
       }
 
       else if (timeRemaining > 60)
@@ -441,9 +441,9 @@ void Downloader::calculateTimeRemaining(qint64 received, qint64 total)
          int minutes = int(timeRemaining + 0.5);
 
          if (minutes > 1)
-            timeString = tr("%1 分钟").arg(minutes);
+            timeString = tr("%1 minute").arg(minutes);
          else
-            timeString = tr("1 分钟");
+            timeString = tr("1 minute");
       }
 
       else if (timeRemaining <= 60)
@@ -451,12 +451,12 @@ void Downloader::calculateTimeRemaining(qint64 received, qint64 total)
          int seconds = int(timeRemaining + 0.5);
 
          if (seconds > 1)
-            timeString = tr("%1 秒").arg(seconds);
+            timeString = tr("%1 second").arg(seconds);
          else
-            timeString = tr("1 秒");
+            timeString = tr("1 second");
       }
 
-      m_ui->timeLabel->setText(tr("剩余时间") + ": " + timeString);
+      m_ui->timeLabel->setText(tr("Remaining time") + ": " + timeString);
    }
 }
 

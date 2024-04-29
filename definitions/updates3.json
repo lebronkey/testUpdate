@@ -2,9 +2,9 @@
   "updates": {
     "windows": {
       "open-url": "",
-      "latest-version": "1.0.0.2",
+      "latest-version": "1.1.5.430",
       "download-url": "https://raw.githubusercontent.com/OrangeCiiCii/VersionUpdate/main/download/ONLINE_UPDATE1.exe",
-      "changelog": "1.0.0.2版本的更新日志",
+      "changelog": "1.1.5.430 版本的更新日志 1.RTK转发修复 2.多路视频界面修改 ",
       "mandatory": true
     },
     "osx": {

@@ -4,8 +4,10 @@ QT += quick
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
+VERSION = 1.0.0.1
 SOURCES += \
-        QmlUpdater.cpp \
+        AppUpdateController.cpp \
         main.cpp
 
 RESOURCES += qml.qrc
@@ -24,4 +26,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 
 HEADERS += \
-    QmlUpdater.h
+    AppUpdateController.h

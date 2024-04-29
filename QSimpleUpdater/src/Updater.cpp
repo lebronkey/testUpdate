@@ -261,13 +261,14 @@ bool Updater::useCustomInstallProcedures() const
 void Updater::checkForUpdates()
 {
     QNetworkRequest request(url());
-
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
 
     if (!userAgentString().isEmpty())
+    {
         request.setRawHeader("User-Agent", userAgentString().toUtf8());
-
+    }
     m_manager->get(request);
+
 }
 
 /**
@@ -411,7 +412,23 @@ void Updater::onReply(QNetworkReply *reply)
     /* Check if we need to redirect 检查是否需要重定向
     * 如果收到了重定向的URL，将新的URL设置为当前URL，并重新发起检查更新的请求。
     */
+    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (!redirectionTarget.isNull()) {
+        QUrl redirect = redirectionTarget.toUrl();
+        if (redirect.isValid()) {
+            // 重定向URL有效，可以使用redirect
+            qDebug() << "Redirect to:" << redirect.toString();
+        } else {
+            // 重定向URL无效
+            qDebug() << "Invalid redirect URL";
+        }
+    } else {
+        // 没有重定向
+        qDebug() << "No redirection";
+    }
+
     QUrl redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+    qInfo()<<redirect;
     if (!redirect.isEmpty())
     {
         setUrl(redirect.toString());
@@ -424,11 +441,11 @@ void Updater::onReply(QNetworkReply *reply)
     */
     if (reply->error() != QNetworkReply::NoError)
     {
+        qInfo()<<"sss";
         setUpdateAvailable(false);
         emit checkingFinished(url());
         return;
     }
-
     /* The application wants to interpret the appcast by itself
     * 处理自定义的应用程序广播（appcast）是为了允许应用程序在检查更新时自定义处理广播的情况
     * 这通常用于应用程序需要特殊处理更新信息的情况，而不仅仅是解析标准的JSON响应
@@ -448,6 +465,7 @@ void Updater::onReply(QNetworkReply *reply)
     /* JSON is invalid  如果 JSON 无效，设置更新不可用并发出 checkingFinished 信号*/
     if (document.isNull())
     {
+        qInfo()<<"fff";
         setUpdateAvailable(false);
         emit checkingFinished(url());
         return;
@@ -494,17 +512,17 @@ void Updater::setUpdateAvailable(const bool available)
 
     if (updateAvailable() && (notifyOnUpdate() || notifyOnFinish()))
     {
-        QString text = tr("有新版本的更新可用，是否立即下载？");
+        QString text = tr("New versions of updates are available. Do you want to download them now?");
         if (m_mandatoryUpdate)
         {
-            text = tr("希望立即下载更新吗？这是强制更新，现在退出将关闭应用程序");
+            text = tr("Do you want to download the update now? This is a mandatory update, exiting now will close the application");
         }
 
         QString title
-                = "<h3>" + tr(" %1 版本的 %2 已发布!").arg(latestVersion()).arg(moduleName()) + "</h3>";
+                = "<h3>" + tr(" %1 Version of %2 Published!").arg(latestVersion()).arg(moduleName()) + "</h3>";
 
         box.setText(title);
-        box.setWindowTitle("下载窗口");
+        box.setWindowTitle("Download window");
         box.setWindowIcon(QIcon(":/icons/nupdate.png"));
         box.setDetailedText(tr(m_changelog.toUtf8().constData()));
         box.setInformativeText(text);
@@ -559,6 +577,7 @@ void Updater::setUpdateAvailable(const bool available)
  */
 bool Updater::compare(const QString &x, const QString &y)
 {
+    qInfo()<<x<<y;
     QStringList versionsX = x.split(".");
     QStringList versionsY = y.split(".");
 

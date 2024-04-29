@@ -443,8 +443,7 @@ Updater *QSimpleUpdater::getUpdater(const QString &url) const
          */
         connect(updater, SIGNAL(checkingFinished(QString)), this, SIGNAL(checkingFinished(QString)));
         connect(updater, SIGNAL(downloadFinished(QString, QString)), this, SIGNAL(downloadFinished(QString, QString)));
-        connect(updater, SIGNAL(appcastDownloaded(QString, QByteArray)), this,
-                SIGNAL(appcastDownloaded(QString, QByteArray)));
+        connect(updater, SIGNAL(appcastDownloaded(QString, QByteArray)), this,SIGNAL(appcastDownloaded(QString, QByteArray)));
     }
 
     //根据给定的URL返回相应 Updater 指针
